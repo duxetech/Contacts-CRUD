@@ -15,6 +15,7 @@ class DBManager {
     var employees = [Employee]()
     let request : NSFetchRequest = EmployeeEntity.fetchRequest()
 
+    //Save to Coredata DB
     func saveData(emp : Employee) {
         let entity = EmployeeEntity(context:context)
         entity.firstName = emp.firstName
@@ -29,7 +30,8 @@ class DBManager {
             print(error.localizedDescription)
         }
     }
-    
+  
+    //read from Coredata DB
     func retrieveData(comp : @escaping ([Employee])->()) {
         employees.removeAll()
 
@@ -50,7 +52,8 @@ class DBManager {
             print(error.localizedDescription)
         }
     }
-    
+  
+    //Update Coredata DB
     func updateData(index: Int, emp : Employee) {
 
         do {
@@ -67,6 +70,7 @@ class DBManager {
         }
     }
     
+    //Delete Coredata records
     func deleteData(index : Int){
         do {
         let entity = try context.fetch(request)
