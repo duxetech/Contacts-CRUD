@@ -18,7 +18,7 @@ class EmployeeDetailsController: UIViewController,UITextFieldDelegate {
     
     var index = 0
     var item : UIBarButtonItem!
-    var mode = ""
+    var mode = "view"
     
     let db =  DBManager()
     var input : Employee?
@@ -28,9 +28,6 @@ class EmployeeDetailsController: UIViewController,UITextFieldDelegate {
         item = navigationItem.rightBarButtonItem
         navigationItem.rightBarButtonItem = item
         phoneField.delegate = self
-        let back = navigationItem.leftBarButtonItem
-        back?.title="cancel"
-        navigationItem.backBarButtonItem = back
 
         if mode=="add" {
             enableTextFields(true)
@@ -64,60 +61,53 @@ class EmployeeDetailsController: UIViewController,UITextFieldDelegate {
     }
     
     
-    @IBAction func editButtonTapped(_ sender: UIButton) {
+    @IBAction func saveButtonTapped(_ sender: UIButton) {
         
         enableTextFields(true)
         firstNameField.becomeFirstResponder()
         getInputs()
         
         guard let input = input else {
-            showAlert()
+            print("invalid input")
             return
         }
-
+        //add screen
         if mode == "add" {
             db.saveData(emp: input)
-            navigationController?.popToRootViewController(animated: true)
-            dismiss(animated: true, completion: nil)
-            return
-        }
+        } else
+        //details screen
         if mode == "view" {
+            item?.title = "Save"
+            mode = "edit"
+            return
+        } else {
+            //edit screen
             db.updateData(index: index, emp: input)
         }
-        
-        if item.title == "Save" {
-            getInputs()
-            navigationController?.popToRootViewController(animated: true)
-            dismiss(animated: true, completion: nil)
-        }
-        item?.title = "Save"
-        
+        navigationController?.popToRootViewController(animated: true)
+        dismiss(animated: true, completion: nil)
+
     }
     
     func getInputs() {
-        guard let first = firstNameField.text, first.isNotEmpty else {
+   
+        guard let first = firstNameField.text, first.isNotEmpty,
+               let last = lastNameField.text, last.isNotEmpty,
+               let phone = phoneField.text, phone.isNotEmpty,
+               let desig = designationField.text, desig.isNotEmpty
+        else {
             showAlert()
             return
         }
-        guard let last = lastNameField.text, last.isNotEmpty else {
-            showAlert()
-            return
-        }
-        guard let phone = phoneField.text, phone.isNotEmpty else {
-            showAlert()
-            return
-        }
-        guard let mail = emailField.text, mail.isValidEmail() else {
+        guard let mail = emailField.text, mail.isValidEmail()
+        
+        else {
             showAlert(with: "Please enter valid mail")
             return
         }
-        guard let desig = designationField.text, desig.isNotEmpty else {
-            showAlert()
-            return
-        }
+
         input = Employee(firstName: first, lastName: last, email: mail, phone: phone, designation: desig)
         
-
     }
     
    

@@ -20,7 +20,7 @@ class EmployeeCell: UITableViewCell {
         // Initialization code
     }
     
-    func configureViewsI(emp : Employee) {
+    func configureCell(emp : Employee) {
         firstName.text = emp.firstName
         lastName.text = emp.lastName
     }

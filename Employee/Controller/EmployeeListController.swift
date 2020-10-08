@@ -49,7 +49,7 @@ extension EmployeeListController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for : indexPath) as! EmployeeCell
-        cell.configureViewsI(emp: employees[indexPath.row])
+        cell.configureCell(emp: employees[indexPath.row])
         return cell
     }
     
@@ -69,10 +69,8 @@ extension EmployeeListController : UITableViewDelegate,UITableViewDataSource {
     }
     
     func launch(mode : String, index : Int) {
-        let s = UIStoryboard(name: "Main", bundle: nil)
-            
-        let controller = s.instantiateViewController(identifier: "EmployeeDetailsController") as! EmployeeDetailsController
-        controller.index = index
+        let controller = storyboard?.instantiateViewController(identifier: "EmployeeDetailsController") as! EmployeeDetailsController
+n        controller.index = index
         controller.mode = mode
         self.navigationController?.pushViewController(controller, animated: true)
         
